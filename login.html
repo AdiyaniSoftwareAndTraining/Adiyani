@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register Page</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the Inter font and overall aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 1rem; /* Rounded corners */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            padding: 2.5rem;
+            max-width: 90%; /* Fluid width */
+            width: 400px; /* Max width for desktop */
+            position: relative; /* For absolute positioning of tabs */
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            border: 1px solid #d1d5db; /* Light gray border */
+            border-radius: 0.5rem; /* Rounded corners for inputs */
+            padding: 0.75rem 1rem;
+            width: 100%;
+            box-sizing: border-box; /* Include padding in width */
+            transition: border-color 0.2s ease-in-out;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #4f46e5; /* Indigo on focus */
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); /* Focus ring */
+        }
+        button {
+            background-color: #4f46e5; /* Indigo background */
+            color: #ffffff;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem; /* Rounded corners for button */
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        button:hover {
+            background-color: #4338ca; /* Darker indigo on hover */
+        }
+        .message-box {
+            background-color: #fef2f2; /* Light red for error */
+            color: #ef4444; /* Dark red text */
+            border: 1px solid #fca5a5; /* Red border */
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none; /* Hidden by default */
+        }
+
+        /* Styles for tabs */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem 0;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #6b7280; /* Gray text */
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-button.active {
+            border-color: #4f46e5; /* Indigo active tab border */
+            color: #4f46e5; /* Indigo active text */
+            font-weight: 600;
+        }
+        .tab-button:hover {
+            color: #3730a3; /* Darker gray on hover */
+        }
+        .form-section {
+            display: none; /* Hidden by default */
+        }
+        .form-section.active {
+            display: block; /* Active form is displayed */
+        }
+
+        /* Password strength indicator styles */
+        .password-strength-indicator {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e0e0e0;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+        .strength-weak { background-color: #ef4444; } /* Red */
+        .strength-medium { background-color: #f59e0b; } /* Orange */
+        .strength-strong { background-color: #10b981; } /* Green */
+
+        /* CAPTCHA styles */
+        .captcha-container {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .captcha-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .captcha-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            text-align: center;
+        }
+
+        .user-info {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            word-break: break-all; /* Ensures long IDs wrap */
+        }
+
+        /* OTP Modal Overlay Styles */
+        .otp-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+
+        .otp-modal-content {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .otp-input-group {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .otp-input {
+            width: 3rem;
+            height: 3rem;
+            font-size: 1.5rem;
+            text-align: center;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            transition: border-color 0.2s ease-in-out;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Email Verification Pending styles */
+        .verification-pending {
+            background-color: #fffbeb; /* Light yellow */
+            color: #b45309; /* Dark yellow text */
+            border: 1px solid #fcd34d; /* Yellow border */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container flex flex-col items-center">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Welcome!</h2>
+
+        <!-- Tab buttons for Login and Register -->
+        <div class="tab-container">
+            <div id="loginTab" class="tab-button active">Login</div>
+            <div id="registerTab" class="tab-button">Register</div>
+        </div>
+
+        <!-- Message box for displaying feedback -->
+        <div id="messageBox" class="message-box w-full"></div>
+
+        <!-- Login Form Section -->
+        <div id="loginSection" class="form-section active w-full">
+            <p class="text-gray-600 text-center mb-8">Sign in to your account to continue.</p>
+            <form id="loginForm" class="w-full">
+                <div class="mb-4">
+                    <label for="loginEmail" class="block text-gray-700 text-sm font-medium mb-2">Email Address</label>
+                    <input type="email" id="loginEmail" name="email" placeholder="Enter your email" class="w-full">
+                </div>
+                <div class="mb-6">
+                    <label for="loginPassword" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="Enter your password" class="w-full">
+                </div>
+                <!-- CAPTCHA for Login -->
+                <div class="captcha-container mb-6">
+                    <label id="loginCaptchaQuestion" class="captcha-question">What is 5 + 3?</label>
+                    <input type="text" id="loginCaptchaAnswer" class="captcha-input" placeholder="Your answer">
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <p class="mt-6 text-sm text-gray-600 text-center">
+                Don't have an account? <a href="#" id="switchToRegisterLink" class="text-indigo-600 hover:text-indigo-800 font-medium">Register here</a>
+            </p>
+        </div>
+
+        <!-- Register Form Section -->
+        <div id="registerSection" class="form-section w-full">
+            <p class="text-gray-600 text-center mb-8">Create a new account.</p>
+            <form id="registerForm" class="w-full">
+                <div class="mb-4">
+                    <label for="registerUsername" class="block text-gray-700 text-sm font-medium mb-2">Username</label>
+                    <input type="text" id="registerUsername" name="username" placeholder="Choose a username" class="w-full">
+                </div>
+                <div class="mb-4">
+                    <label for="registerEmail" class="block text-gray-700 text-sm font-medium mb-2">Email Address</label>
+                    <input type="email" id="registerEmail" name="email" placeholder="Enter your email" class="w-full">
+                </div>
+                <div class="mb-4">
+                    <label for="registerPassword" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="registerPassword" name="password" placeholder="Create a password" class="w-full">
+                    <!-- Password Strength Indicator -->
+                    <div class="password-strength-indicator">
+                        <div id="passwordStrengthBar" class="password-strength-bar"></div>
+                    </div>
+                    <p id="passwordStrengthText" class="text-xs mt-1 text-gray-500"></p>
+                </div>
+                <div class="mb-6">
+                    <label for="confirmPassword" class="block text-gray-700 text-sm font-medium mb-2">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" class="w-full">
+                </div>
+                <!-- CAPTCHA for Registration -->
+                <div class="captcha-container mb-6">
+                    <label id="registerCaptchaQuestion" class="captcha-question">What is 7 minus 2?</label>
+                    <input type="text" id="registerCaptchaAnswer" class="captcha-input" placeholder="Your answer">
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <p class="mt-6 text-sm text-gray-600 text-center">
+                Already have an account? <a href="#" id="switchToLoginLink" class="text-indigo-600 hover:text-indigo-800 font-medium">Login here</a>
+            </p>
+        </div>
+        <!-- Email Verification Pending Section -->
+        <div id="emailVerificationPending" class="verification-pending w-full">
+            <p>A verification email has been sent to <strong id="pendingVerificationEmail"></strong>. Please check your inbox and click the link to verify your account.</p>
+            <button id="resendVerificationEmail" class="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition duration-200">Resend Email</button>
+        </div>
+
+        <!-- Display area for user info after successful authentication -->
+        <div id="userInfoDisplay" class="user-info w-full" style="display: none;"></div>
+    </div>
+
+    <!-- Simulated OTP Modal -->
+    <div id="otpModalOverlay" class="otp-modal-overlay">
+        <div class="otp-modal-content">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Verify Your Login</h3>
+            <p class="text-gray-600 mb-4">Please enter the 4-digit code displayed to simulate email OTP verification.</p>
+            <p class="text-lg font-bold text-indigo-600 mb-4">Simulated OTP: <span id="simulatedOtpCode"></span></p>
+            <div class="otp-input-group">
+                <input type="text" class="otp-input" id="otpInput1" maxlength="1">
+                <input type="text" class="otp-input" id="otpInput2" maxlength="1">
+                <input type="text" class="otp-input" id="otpInput3" maxlength="1">
+                <input type="text" class="otp-input" id="otpInput4" maxlength="1">
+            </div>
+            <button id="verifyOtpButton">Verify OTP</button>
+            <p class="mt-4 text-sm text-red-500" id="otpError" style="display:none;">Incorrect OTP. Please try again.</p>
+        </div>
+    </div>
+
+
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Firebase Initialization ---
+        // These global variables are provided by the Canvas environment.
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase services
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUserId = null; // To store the authenticated user's ID
+        let isAuthReady = false; // Flag to indicate if authentication is ready
+        let loggedInUserEmail = null; // To store email of logged in user for OTP simulation
+        let simulatedLoginOtp = null; // To store the simulated OTP for login verification
+
+        // Listen for authentication state changes
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in
+                currentUserId = user.uid;
+                loggedInUserEmail = user.email; // Capture email if available
+                console.log('Firebase Auth: User is signed in. UID:', currentUserId, 'Email Verified:', user.emailVerified);
+            } else {
+                // User is signed out or not yet authenticated
+                currentUserId = null;
+                loggedInUserEmail = null;
+                console.log('Firebase Auth: User is signed out.');
+            }
+            isAuthReady = true; // Auth state has been checked
+            updateUserInfoDisplay(); // Update UI based on current auth state
+        });
+
+        // Sign in with custom token or anonymously if no token
+        async function authenticateFirebase() {
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                    console.log('Firebase Auth: Signed in with custom token.');
+                } else {
+                    await signInAnonymously(auth);
+                    console.log('Firebase Auth: Signed in anonymously.');
+                }
+            } catch (error) {
+                console.error('Firebase Auth Error during initial sign-in:', error);
+                showMessage(`Authentication error: ${error.message}`, true);
+            }
+        }
+
+        // Call authentication function on page load
+        authenticateFirebase();
+
+        // Get references to elements (existing and new ones)
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginSection = document.getElementById('loginSection');
+        const registerSection = document.getElementById('registerSection');
+        const messageBox = document.getElementById('messageBox');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginEmailInput = document.getElementById('loginEmail');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const registerUsernameInput = document.getElementById('registerUsername');
+        const registerEmailInput = document.getElementById('registerEmail');
+        const registerPasswordInput = document.getElementById('registerPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const switchToRegisterLink = document.getElementById('switchToRegisterLink');
+        const switchToLoginLink = document.getElementById('switchToLoginLink');
+        const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+        const passwordStrengthText = document.getElementById('passwordStrengthText');
+        const loginCaptchaQuestion = document.getElementById('loginCaptchaQuestion');
+        const loginCaptchaAnswer = document.getElementById('loginCaptchaAnswer');
+        const registerCaptchaQuestion = document.getElementById('registerCaptchaQuestion');
+        const registerCaptchaAnswer = document.getElementById('registerCaptchaAnswer');
+        const userInfoDisplay = document.getElementById('userInfoDisplay');
+        const emailVerificationPending = document.getElementById('emailVerificationPending');
+        const pendingVerificationEmail = document.getElementById('pendingVerificationEmail');
+        const resendVerificationEmailBtn = document.getElementById('resendVerificationEmail');
+
+        // OTP Modal elements
+        const otpModalOverlay = document.getElementById('otpModalOverlay');
+        const simulatedOtpCode = document.getElementById('simulatedOtpCode');
+        const otpInput1 = document.getElementById('otpInput1');
+        const otpInput2 = document.getElementById('otpInput2');
+        const otpInput3 = document.getElementById('otpInput3');
+        const otpInput4 = document.getElementById('otpInput4');
+        const verifyOtpButton = document.getElementById('verifyOtpButton');
+        const otpError = document.getElementById('otpError');
+
+        // CAPTCHA variables
+        let currentLoginCaptchaAnswer;
+        let currentRegisterCaptchaAnswer;
+
+        /**
+         * Generates a simple math CAPTCHA.
+         * @returns {{question: string, answer: number}} The CAPTCHA question and its answer.
+         */
+        function generateCaptcha() {
+            const num1 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const operator = Math.random() > 0.5 ? '+' : '-'; // Randomly choose addition or subtraction
+            let question, answer;
+
+            if (operator === '+') {
+                question = `What is ${num1} + ${num2}?`;
+                answer = num1 + num2;
+            } else {
+                // Ensure the result is not negative for simplicity
+                if (num1 < num2) {
+                    question = `What is ${num2} - ${num1}?`;
+                    answer = num2 - num1;
+                } else {
+                    question = `What is ${num1} - ${num2}?`;
+                    answer = num1 - num2;
+                }
+            }
+            return { question, answer };
+        }
+
+        /**
+         * Updates the CAPTCHA question for a given form.
+         * @param {HTMLElement} questionElement - The element to display the question.
+         * @param {HTMLElement} answerInput - The input field for the answer.
+         * @param {boolean} isLogin - True if it's the login captcha, false for register.
+         */
+        function updateCaptcha(questionElement, answerInput, isLogin) {
+            const captcha = generateCaptcha();
+            questionElement.textContent = captcha.question;
+            answerInput.value = ''; // Clear previous answer
+            if (isLogin) {
+                currentLoginCaptchaAnswer = captcha.answer;
+            } else {
+                currentRegisterCaptchaAnswer = captcha.answer;
+            }
+        }
+
+        /**
+         * Checks the strength of a password.
+         * @param {string} password - The password string.
+         * @returns {number} - A score indicating strength (0-100).
+         */
+        function checkPasswordStrength(password) {
+            let score = 0;
+            if (password.length > 5) score += 10;
+            if (password.length > 8) score += 10;
+            if (password.length > 12) score += 20; // Good length
+            if (/[a-z]/.test(password)) score += 10; // Lowercase
+            if (/[A-Z]/.test(password)) score += 10; // Uppercase
+            if (/\d/.test(password)) score += 10; // Numbers
+            if (/[^a-zA-Z0-9]/.test(password)) score += 20; // Special characters
+            // Avoid sequential characters (e.g., 'abc', '123')
+            if (!/(abc|123|qwe|asd|zxc)/i.test(password)) score += 5;
+            // Avoid repeating characters (e.g., 'aaaa')
+            if (!/(.)\1{2,}/.test(password)) score += 5;
+
+            return Math.min(score, 100); // Cap at 100
+        }
+
+        /**
+         * Updates the visual password strength indicator.
+         * @param {string} password - The password to evaluate.
+         */
+        function updatePasswordStrengthIndicator(password) {
+            const strength = checkPasswordStrength(password);
+            passwordStrengthBar.style.width = `${strength}%`;
+            passwordStrengthBar.className = 'password-strength-bar'; // Reset classes
+
+            if (strength < 40) {
+                passwordStrengthBar.classList.add('strength-weak');
+                passwordStrengthText.textContent = 'Weak';
+                passwordStrengthText.style.color = '#ef4444';
+            } else if (strength < 70) {
+                passwordStrengthBar.classList.add('strength-medium');
+                passwordStrengthText.textContent = 'Medium';
+                passwordStrengthText.style.color = '#f59e0b';
+            } else {
+                passwordStrengthBar.classList.add('strength-strong');
+                passwordStrengthText.textContent = 'Strong';
+                passwordStrengthText.style.color = '#10b981';
+            }
+            if (password.length === 0) {
+                passwordStrengthBar.style.width = '0%';
+                passwordStrengthText.textContent = '';
+            }
+        }
+
+        /**
+         * Shows a specific form section and hides others.
+         * Updates the active tab button styling.
+         * @param {string} sectionId - The ID of the section to show ('loginSection', 'registerSection', 'emailVerificationPending').
+         */
+        function showSection(sectionId) {
+            // Hide all main sections and messages
+            loginSection.classList.remove('active');
+            registerSection.classList.remove('active');
+            emailVerificationPending.style.display = 'none';
+            messageBox.style.display = 'none'; // Hide general messages
+            otpModalOverlay.style.display = 'none'; // Ensure OTP modal is hidden
+
+            // Deactivate all tab buttons
+            loginTab.classList.remove('active');
+            registerTab.classList.remove('active');
+
+
+            // Show the selected section and activate its tab if applicable
+            if (sectionId === 'loginSection') {
+                loginSection.classList.add('active');
+                loginTab.classList.add('active');
+                updateCaptcha(loginCaptchaQuestion, loginCaptchaAnswer, true); // Refresh login CAPTCHA
+                loginEmailInput.value = ''; // Clear login fields
+                loginPasswordInput.value = '';
+                loginCaptchaAnswer.value = '';
+            } else if (sectionId === 'registerSection') {
+                registerSection.classList.add('active');
+                registerTab.classList.add('active');
+                updateCaptcha(registerCaptchaQuestion, registerCaptchaAnswer, false); // Refresh register CAPTCHA
+                updatePasswordStrengthIndicator(registerPasswordInput.value); // Update strength on tab switch
+                registerUsernameInput.value = ''; // Clear registration fields
+                registerEmailInput.value = '';
+                registerPasswordInput.value = '';
+                confirmPasswordInput.value = '';
+                registerCaptchaAnswer.value = '';
+                passwordStrengthBar.style.width = '0%';
+                passwordStrengthText.textContent = '';
+            } else if (sectionId === 'emailVerificationPending') {
+                emailVerificationPending.style.display = 'block';
+                // No tab active if verification is pending for now
+            }
+            updateUserInfoDisplay(); // Always update user info display when section changes
+        }
+
+        /**
+         * Displays a message in the message box.
+         * @param {string} message - The message to display.
+         * @param {boolean} isError - True if the message is an error, false for success/info.
+         */
+        function showMessage(message, isError) {
+            messageBox.textContent = message;
+            // Apply appropriate styling based on whether it's an error
+            if (isError) {
+                messageBox.style.backgroundColor = '#fef2f2'; /* Light red */
+                messageBox.style.color = '#ef4444'; /* Dark red */
+                messageBox.style.borderColor = '#fca5a5'; /* Red border */
+            } else {
+                messageBox.style.backgroundColor = '#ecfdf5'; /* Light green */
+                messageBox.style.color = '#10b981'; /* Dark green */
+                messageBox.style.borderColor = '#a7f3d0'; /* Green border */
+            }
+            messageBox.style.display = 'block'; // Make the message box visible
+        }
+
+        /**
+         * Updates the display area for user information.
+         */
+        async function updateUserInfoDisplay() {
+            if (auth.currentUser && auth.currentUser.uid && isAuthReady) {
+                // Ensure currentUserId is consistent with auth.currentUser.uid
+                currentUserId = auth.currentUser.uid;
+                loggedInUserEmail = auth.currentUser.email;
+
+                const userProfileDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}/userProfiles/profile`);
+                try {
+                    const docSnap = await getDoc(userProfileDocRef);
+                    let username = 'N/A';
+                    if (docSnap.exists()) {
+                        const userData = docSnap.data();
+                        username = userData.username || 'N/A';
+                    }
+
+                    const emailVerifiedStatus = auth.currentUser.emailVerified ? 'Verified' : 'Not Verified';
+
+                    userInfoDisplay.innerHTML = `
+                        <strong>Logged In!</strong><br>
+                        User ID: ${currentUserId}<br>
+                        Username: ${username}<br>
+                        Email: ${loggedInUserEmail || 'N/A'} (Status: ${emailVerifiedStatus})
+                    `;
+                    userInfoDisplay.style.display = 'block';
+                } catch (error) {
+                    console.error("Error fetching user profile:", error);
+                    userInfoDisplay.innerHTML = `
+                        <strong>Logged In!</strong><br>
+                        User ID: ${currentUserId}<br>
+                        (Error loading profile)
+                    `;
+                    userInfoDisplay.style.display = 'block';
+                }
+            } else {
+                userInfoDisplay.style.display = 'none'; // Hide if not authenticated
+            }
+        }
+
+        // Event listeners for tab buttons
+        loginTab.addEventListener('click', () => showSection('loginSection'));
+        registerTab.addEventListener('click', () => showSection('registerSection'));
+        switchToRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('registerSection');
+        });
+        switchToLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('loginSection');
+        });
+
+        // Event listener for password input to update strength indicator
+        registerPasswordInput.addEventListener('input', (event) => {
+            updatePasswordStrengthIndicator(event.target.value);
+        });
+
+        // Resend Verification Email button click
+        resendVerificationEmailBtn.addEventListener('click', async () => {
+            if (auth.currentUser) {
+                try {
+                    showMessage('Resending verification email...', false);
+                    await sendEmailVerification(auth.currentUser);
+                    showMessage('Verification email resent successfully!', false);
+                } catch (error) {
+                    console.error('Error resending verification email:', error);
+                    showMessage(`Failed to resend email: ${error.message}`, true);
+                }
+            } else {
+                showMessage('No user logged in to resend email.', true);
+            }
+        });
+
+        // Login Form Submission
+        loginForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const email = loginEmailInput.value.trim();
+            const password = loginPasswordInput.value.trim();
+            const captchaAnswer = parseInt(loginCaptchaAnswer.value.trim(), 10);
+
+            if (email === '' || password === '') {
+                showMessage('Please fill in all login fields.', true);
+                return;
+            }
+
+            if (isNaN(captchaAnswer) || captchaAnswer !== currentLoginCaptchaAnswer) {
+                showMessage('Incorrect CAPTCHA answer. Please try again.', true);
+                updateCaptcha(loginCaptchaQuestion, loginCaptchaAnswer, true);
+                return;
+            }
+
+            showMessage('Attempting to log in...', false);
+
+            try {
+                if (!isAuthReady) {
+                    showMessage('Firebase authentication not ready. Please wait or refresh.', true);
+                    return;
+                }
+
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // --- Simulated OTP for Login ---
+                // This is a client-side simulation. In a real app, the server would generate and send OTP.
+                // The client would then wait for the user to input it and send it back to the server for verification.
+                simulatedLoginOtp = Math.floor(1000 + Math.random() * 9000); // 4-digit OTP
+                simulatedOtpCode.textContent = simulatedLoginOtp;
+                otpModalOverlay.style.display = 'flex'; // Show OTP modal
+                otpError.style.display = 'none'; // Hide any previous OTP errors
+                otpInput1.value = ''; otpInput2.value = ''; otpInput3.value = ''; otpInput4.value = ''; // Clear inputs
+                otpInput1.focus(); // Focus on first OTP input
+
+                // Clear login form fields after successful Firebase auth
+                loginEmailInput.value = '';
+                loginPasswordInput.value = '';
+                loginCaptchaAnswer.value = '';
+                messageBox.style.display = 'none'; // Hide current message box while OTP modal is active
+
+                // Update current user context *after* successful Firebase Auth, before OTP
+                currentUserId = user.uid;
+                loggedInUserEmail = user.email;
+
+
+            } catch (error) {
+                console.error('Firebase Login Error:', error);
+                let errorMessage = 'Login failed. Please check your credentials.';
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage = 'Invalid email or password.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email format.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'Too many login attempts. Please try again later.';
+                }
+                showMessage(`Login failed: ${errorMessage}`, true);
+                updateCaptcha(loginCaptchaQuestion, loginCaptchaAnswer, true);
+            }
+        });
+
+        // OTP Input Autofocus and Navigation
+        const otpInputs = [otpInput1, otpInput2, otpInput3, otpInput4];
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Verify OTP Button Click
+        verifyOtpButton.addEventListener('click', async () => {
+            const enteredOtp = otpInputs.map(input => input.value).join('');
+
+            if (enteredOtp === String(simulatedLoginOtp)) {
+                otpModalOverlay.style.display = 'none';
+                showMessage('OTP Verified! Welcome.', false);
+
+                // Now that OTP is "verified", proceed to fetch profile and display user info
+                // In a real scenario, this step would be after backend OTP verification.
+                const userProfileDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}/userProfiles/profile`);
+                try {
+                    const docSnap = await getDoc(userProfileDocRef);
+                    if (docSnap.exists()) {
+                        const userData = docSnap.data();
+                        console.log("User profile data:", userData);
+                        showMessage(`Welcome, ${userData.username || loggedInUserEmail}!`, false);
+                    } else {
+                        showMessage(`Welcome, ${loggedInUserEmail}! No additional profile data found.`, false);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user profile after OTP:", error);
+                    showMessage(`Welcome, ${loggedInUserEmail}! Error loading profile.`, false);
+                }
+                updateUserInfoDisplay(); // Update UI display after successful login and OTP
+            } else {
+                otpError.style.display = 'block';
+                showMessage('Incorrect OTP. Please try again.', true); // Also show in main message box
+                otpInputs.forEach(input => input.value = ''); // Clear OTP inputs
+                otpInput1.focus(); // Focus back to first input
+            }
+        });
+
+
+        // Register Form Submission
+        registerForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const username = registerUsernameInput.value.trim();
+            const email = registerEmailInput.value.trim();
+            const password = registerPasswordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+            const captchaAnswer = parseInt(registerCaptchaAnswer.value.trim(), 10);
+
+            if (username === '' || email === '' || password === '' || confirmPassword === '') {
+                showMessage('Please fill in all registration fields.', true);
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match.', true);
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters long.', true);
+                return;
+            }
+
+            if (isNaN(captchaAnswer) || captchaAnswer !== currentRegisterCaptchaAnswer) {
+                showMessage('Incorrect CAPTCHA answer. Please try again.', true);
+                updateCaptcha(registerCaptchaQuestion, registerCaptchaAnswer, false);
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address.', true);
+                return;
+            }
+
+            if (checkPasswordStrength(password) < 70) {
+                showMessage('Please choose a stronger password.', true);
+                return;
+            }
+
+            showMessage('Registering your account...', false);
+
+            try {
+                if (!isAuthReady) {
+                    showMessage('Firebase authentication not ready. Please wait or refresh.', true);
+                    return;
+                }
+
+                // --- Firebase Authentication: Create User with Email and Password ---
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                console.log('Firebase Registration successful:', user.uid);
+
+                // --- Firebase Email Verification: Send Verification Email ---
+                // This sends an email with a verification link to the user.
+                // It's not a numeric OTP, but the standard Firebase email verification.
+                await sendEmailVerification(user);
+                console.log('Verification email sent to:', user.email);
+
+                // --- Firestore: Save user profile data ---
+                // Data is stored in a private collection for the user:
+                // /artifacts/{appId}/users/{userId}/userProfiles/profile
+                const userProfileDocRef = doc(db, `artifacts/${appId}/users/${user.uid}/userProfiles/profile`);
+                await setDoc(userProfileDocRef, {
+                    username: username,
+                    email: email,
+                    createdAt: new Date(),
+                    emailVerified: user.emailVerified // Will be false initially
+                });
+                console.log('User profile saved to Firestore.');
+
+                // After successful registration and email sent, show verification pending message
+                pendingVerificationEmail.textContent = email;
+                showSection('emailVerificationPending'); // Show the pending verification message
+
+            } catch (error) {
+                console.error('Firebase Registration Error:', error);
+                let errorMessage = 'Registration failed. Please try again.';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'The email address is already in use.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'The password is too weak.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'The email address is not valid.';
+                }
+                showMessage(`Registration failed: ${errorMessage}`, true);
+                updateCaptcha(registerCaptchaQuestion, registerCaptchaAnswer, false); // Refresh CAPTCHA on failure
+            }
+        });
+
+        // Initialize the view to the login section and generate initial CAPTCHA
+        showSection('loginSection');
+    </script>
+</body>
+</html>
