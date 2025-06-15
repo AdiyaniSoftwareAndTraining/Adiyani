@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learnify - Your Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            color: #374151; /* Default text color */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1200px; /* Same as container */
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            text-decoration: none;
+        }
+
+        .header-nav {
+            display: none; /* Hidden on small screens by default */
+            gap: 1.5rem;
+            color: #4b5563;
+        }
+
+        .header-nav a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 500;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .header-nav a:hover {
+            color: #6d28d9; /* purple-700 */
+        }
+
+        .header-auth-buttons {
+            display: none; /* Hidden on small screens by default */
+            gap: 1rem;
+        }
+
+        .header-auth-buttons button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .header-auth-buttons .login-btn {
+            border: 1px solid #d1d5db;
+            background-color: #fff;
+            color: #1f2937;
+        }
+
+        .header-auth-buttons .login-btn:hover {
+            background-color: #f9fafb;
+        }
+
+        .header-auth-buttons .signup-btn {
+            background-color: #6d28d9; /* purple-600 */
+            color: #fff;
+            border: 1px solid transparent;
+        }
+
+        .header-auth-buttons .signup-btn:hover {
+            background-color: #5b21b6; /* purple-700 */
+        }
+
+        .search-form {
+            display: flex;
+            flex-grow: 1;
+            width: 100%;
+            max-width: 56rem; /* max-w-lg */
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+            outline: none;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .search-input:focus {
+            border-color: #8b5cf6; /* purple-500 */
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
+        }
+
+        .search-button {
+            background-color: #6d28d9; /* purple-600 */
+            color: #fff;
+            padding: 0.5rem;
+            border: none;
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem; /* fixed width for icon button */
+            height: 2.5rem; /* fixed height for icon button */
+        }
+
+        .search-button:hover {
+            background-color: #5b21b6; /* purple-700 */
+        }
+
+        .search-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(to right, #6d28d9, #4c1d95); /* from-purple-600 to-indigo-700 */
+            color: #fff;
+            padding: 4rem 1rem;
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            margin-bottom: 1rem;
+            line-height: 1.25; /* leading-tight */
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem; /* text-xl */
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-button {
+            background-color: #fff;
+            color: #6d28d9; /* purple-700 */
+            padding: 0.75rem 2rem;
+            border-radius: 9999px; /* rounded-full */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 700; /* font-bold */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .hero-button:hover {
+            background-color: #f9fafb;
+            transform: scale(1.05);
+        }
+
+        /* Course Listing */
+        .course-listing-section {
+            padding: 3rem 1rem;
+            background-color: #f9fafb; /* gray-50 */
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .course-listing-title {
+            font-size: 2rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* gray-900 */
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Course Card */
+        .course-card {
+            background-color: #fff;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .course-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-0.25rem); /* -translate-y-1 */
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 12rem; /* h-48 */
+            object-fit: cover;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+        }
+
+        .course-card-content {
+            padding: 1.25rem;
+        }
+
+        .course-card-title {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            color: #1f2937; /* gray-900 */
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .course-card-instructor {
+            font-size: 0.875rem; /* text-sm */
+            color: #4b5563; /* gray-600 */
+            margin-bottom: 0.5rem;
+        }
+
+        .course-card-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .course-card-rating span {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 700; /* font-bold */
+            color: #f59e0b; /* yellow-500 */
+            margin-right: 0.25rem;
+        }
+
+        .course-card-rating .stars svg {
+            color: #f59e0b; /* yellow-500 */
+            width: 16px;
+            height: 16px;
+        }
+
+        .course-card-rating .stars .gray-star {
+            color: #d1d5db; /* gray-300 */
+        }
+
+        .course-card-rating .reviews {
+            font-size: 0.875rem; /* text-sm */
+            color: #6b7280; /* gray-500 */
+            margin-left: 0.5rem;
+        }
+
+        .course-card-price-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .course-card-price {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* gray-900 */
+            display: flex;
+            align-items: center;
+        }
+
+        .course-card-price svg {
+            width: 18px;
+            height: 18px;
+            color: #4b5563; /* gray-700 */
+            margin-right: 0.25rem;
+        }
+
+        .course-card-original-price {
+            font-size: 0.875rem; /* text-sm */
+            color: #6b7280; /* gray-500 */
+            text-decoration: line-through;
+            display: flex;
+            align-items: center;
+        }
+
+        .course-card-original-price svg {
+            width: 14px;
+            height: 14px;
+            color: #9ca3af; /* gray-400 */
+            margin-right: 0.125rem;
+        }
+
+        /* Course Detail Page */
+        .course-detail-page {
+            background-color: #fff;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 0.75rem; /* rounded-xl */
+            margin: 2rem auto;
+            padding: 1.5rem;
+        }
+
+        .back-button {
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #e5e7eb; /* gray-200 */
+            color: #374151; /* gray-800 */
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .back-button:hover {
+            background-color: #d1d5db; /* gray-300 */
+        }
+
+        .course-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .course-info-section img {
+            width: 100%;
+            height: 18rem; /* h-72 */
+            object-fit: cover;
+            border-radius: 0.5rem; /* rounded-lg */
+            margin-bottom: 1.5rem;
+        }
+
+        .course-info-section h1 {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            color: #1f2937; /* gray-900 */
+            margin-bottom: 0.75rem;
+        }
+
+        .course-info-section .description {
+            font-size: 1.25rem; /* text-xl */
+            color: #374151; /* gray-700 */
+            margin-bottom: 1rem;
+        }
+
+        .course-meta {
+            display: flex;
+            align-items: center;
+            color: #4b5563; /* gray-600 */
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .course-meta .instructor {
+            font-weight: 600;
+        }
+
+        .course-meta .rating-detail {
+            display: flex;
+            align-items: center;
+        }
+
+        .course-meta .rating-detail svg {
+            color: #f59e0b; /* yellow-500 */
+            margin-right: 0.25rem;
+            width: 20px;
+            height: 20px;
+        }
+
+        .course-meta .rating-detail .score {
+            font-weight: 700;
+            font-size: 1.125rem; /* text-lg */
+            color: #d97706; /* yellow-600 */
+        }
+
+        .course-meta .rating-detail .count {
+            color: #6b7280; /* gray-500 */
+            margin-left: 0.25rem;
+        }
+
+        .what-you-learn-section h2,
+        .course-content-section h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* gray-900 */
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .learnings-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem 1.5rem; /* gap-y-3 gap-x-6 */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            color: #374151; /* gray-700 */
+        }
+
+        .learnings-list li {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .learnings-list li svg {
+            width: 20px;
+            height: 20px;
+            color: #10b981; /* green-500 */
+            margin-right: 0.5rem;
+            margin-top: 0.25rem; /* mt-1 */
+            flex-shrink: 0;
+        }
+
+        .curriculum-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .curriculum-section {
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 1rem;
+        }
+
+        .curriculum-section h3 {
+            font-weight: 600;
+            font-size: 1.125rem; /* text-lg */
+            color: #1f2937; /* gray-800 */
+            margin-bottom: 0.5rem;
+        }
+
+        .curriculum-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 0.25rem;
+        }
+
+        .curriculum-section li {
+            color: #374151; /* gray-700 */
+            display: flex;
+            align-items: center;
+        }
+
+        .curriculum-section li svg {
+            width: 18px;
+            height: 18px;
+            color: #6b7280; /* gray-500 */
+            margin-right: 0.5rem;
+        }
+
+        /* Action Panel */
+        .action-panel {
+            background-color: #f9fafb; /* gray-50 */
+            padding: 1.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 6rem; /* Adjust based on header height, top-24 */
+            align-self: flex-start;
+        }
+
+        .action-panel .price-display {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* gray-900 */
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .action-panel .price-display svg {
+            width: 24px;
+            height: 24px;
+            color: #4b5563; /* gray-700 */
+            margin-right: 0.5rem;
+        }
+
+        .action-panel .original-price-display {
+            font-size: 1.125rem; /* text-lg */
+            color: #6b7280; /* gray-500 */
+            text-decoration: line-through;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .action-panel .original-price-display svg {
+            width: 18px;
+            height: 18px;
+            color: #9ca3af; /* gray-400 */
+            margin-right: 0.25rem;
+        }
+
+        .action-panel button {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 700; /* font-bold */
+            transition: background-color 0.2s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-panel .add-to-cart-btn {
+            background-color: #6d28d9; /* purple-600 */
+            color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .action-panel .add-to-cart-btn:hover {
+            background-color: #5b21b6; /* purple-700 */
+        }
+
+        .action-panel .buy-now-btn {
+            background-color: #e5e7eb; /* gray-200 */
+            color: #374151; /* gray-800 */
+        }
+
+        .action-panel .buy-now-btn:hover {
+            background-color: #d1d5db; /* gray-300 */
+        }
+
+        .action-panel .guarantee-text {
+            text-align: center;
+            font-size: 0.875rem; /* text-sm */
+            color: #6b7280; /* gray-500 */
+            margin-top: 1rem;
+        }
+
+
+        /* Footer */
+        footer {
+            background-color: #1f2937; /* gray-800 */
+            color: #fff;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+        }
+
+        .footer-content {
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .footer-links a:hover {
+            color: #a78bfa; /* purple-400 */
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) { /* md breakpoint */
+            .header-content {
+                flex-direction: row;
+            }
+            .header-top {
+                margin-bottom: 0;
+                width: auto;
+                justify-content: flex-start;
+            }
+            .header-nav {
+                display: flex;
+            }
+            .header-auth-buttons {
+                display: flex;
+                margin-left: 1rem;
+            }
+            .search-form {
+                margin-left: 1rem; /* Adjust spacing */
+                width: auto;
+            }
+            .hero-title {
+                font-size: 3rem; /* text-5xl */
+            }
+            .hero-subtitle {
+                font-size: 1.5rem; /* text-2xl */
+            }
+            .course-detail-grid {
+                grid-template-columns: 2fr 1fr; /* md:grid-cols-3 */
+            }
+            .learnings-list {
+                grid-template-columns: repeat(2, 1fr); /* sm:grid-cols-2 */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .course-grid {
+                grid-template-columns: repeat(3, 1fr); /* lg:grid-cols-3 */
+            }
+        }
+        @media (min-width: 1280px) { /* xl breakpoint */
+            .course-grid {
+                grid-template-columns: repeat(4, 1fr); /* xl:grid-cols-4 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="header-top">
+                <a href="#" class="header-logo">Learnify</a>
+                <nav class="header-nav">
+                    <a href="#">Categories</a>
+                    <a href="#">Teach on Learnify</a>
+                </nav>
+            </div>
+            <form class="search-form">
+                <input type="text" id="search-input" placeholder="Search for anything" class="search-input">
+                <button type="submit" class="search-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                </button>
+            </form>
+            <div class="header-auth-buttons">
+                <a href="https://adiyanisoftwareandtraining.github.io/Adiyani/login.html"><button class="login-btn">Login</button></a>
+                <button class="signup-btn">Sign up</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2 class="hero-title">Learning that gets you skills for today's future</h2>
+                <p class="hero-subtitle">Discover a world of possibilities through our vast collection of courses.</p>
+               <a href="https://drive.google.com/file/d/1lXux7Lhw1sizOYlawCYhqU29LFRz0Mnz/view"> <a href="https://drive.google.com/file/d/1lXux7Lhw1sizOYlawCYhqU29LFRz0Mnz/view" class="hero-button">Start Learning Today</a></a>
+            </div>
+        </section>
+
+        <!-- Course Listing Section -->
+        <section class="course-listing-section">
+            <div class="container">
+                <h2 class="course-listing-title">A broad selection of courses</h2>
+                <div class="course-grid" id="course-grid">
+                    <!-- Course cards will be dynamically inserted here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Detail Section (hidden by default) -->
+        <section class="course-detail-page" id="course-detail-page" style="display: none;">
+            <div class="container">
+                <button id="back-to-courses-btn" class="back-button">&larr; Back to Courses</button>
+
+                <div class="course-detail-grid">
+                    <div class="course-info-section">
+                        <img id="detail-course-image" src="" alt="Course Image">
+                        <h1 id="detail-course-title"></h1>
+                        <p class="description" id="detail-course-description"></p>
+
+                        <div class="course-meta">
+                            <span class="instructor" id="detail-course-instructor"></span>
+                            <div class="rating-detail">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                <span class="score" id="detail-course-rating"></span>
+                                <span class="count" id="detail-course-reviews"></span>
+                            </div>
+                        </div>
+
+                        <h2 class="what-you-learn-section-title">What you'll learn</h2>
+                        <ul class="learnings-list" id="detail-course-learnings">
+                            <!-- Learnings will be dynamically inserted here -->
+                        </ul>
+
+                        <h2 class="course-content-section-title">Course Content</h2>
+                        <div class="curriculum-list" id="detail-course-curriculum">
+                            <!-- Curriculum will be dynamically inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="action-panel">
+                        <div class="price-display">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v22"></path>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            <span id="detail-course-price"></span>
+                        </div>
+                        <div class="original-price-display" id="detail-course-original-price-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v22"></path>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            <span id="detail-course-original-price"></span>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="buy-now-btn">Buy Now</button>
+                        <p class="guarantee-text">30-Day Money-Back Guarantee</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Learnify. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dummy Course Data
+        const DUMMY_COURSES = [
+            {
+                id: 'c1',
+                title: 'The Complete 2025 Web Development Bootcamp',
+                instructor: 'Angela Yu',
+                rating: 4.7,
+                reviews: 12000,
+                price: 19.99,
+                originalPrice: 99.99,
+                imageUrl: 'https://placehold.co/300x180/ADD8E6/000000?text=Web+Dev',
+                description: 'Master the art of web development with HTML, CSS, JavaScript, Node, React, MongoDB, and more! Build a full-stack website from scratch.',
+                learnings: [
+                    'Build any website you want',
+                    'Develop powerful, professional, and responsive websites',
+                    'Work as a freelance web developer',
+                    'Fully understand the latest HTML5, CSS3, ES6, and Bootstrap 4 features',
+                    'React basics and advanced concepts'
+                ],
+                curriculum: [
+                    { section: 'Introduction to Web Development', lessons: ['Welcome', 'How the Web Works'] },
+                    { section: 'HTML - The Foundation', lessons: ['Basic Tags', 'Forms and Input'] },
+                    { section: 'CSS - Styling Your Website', lessons: ['Selectors', 'Flexbox and Grid'] },
+                    { section: 'JavaScript - Interactivity', lessons: ['Variables', 'DOM Manipulation'] },
+                    { section: 'React - Building User Interfaces', lessons: ['Components', 'State Management'] },
+                ]
+            },
+            {
+                id: 'c2',
+                title: 'Python for Data Science and Machine Learning Bootcamp',
+                instructor: 'Jose Portilla',
+                rating: 4.6,
+                reviews: 9500,
+                price: 15.99,
+                originalPrice: 89.99,
+                imageUrl: 'https://placehold.co/300x180/ADD8E6/000000?text=Python+ML',
+                description: 'Learn Python for Data Science and Machine Learning, including NumPy, Pandas, Matplotlib, Scikit-learn, and more!',
+                learnings: [
+                    'Use Python for Data Science and Machine Learning',
+                    'Implement Machine Learning Algorithms',
+                    'Use NumPy, Pandas, Matplotlib, Seaborn for data analysis',
+                    'Build Artificial Neural Networks in Python'
+                ],
+                curriculum: [
+                    { section: 'Python Crash Course', lessons: ['Data Types', 'Functions'] },
+                    { section: 'NumPy and Pandas', lessons: ['Array Operations', 'DataFrames'] },
+                    { section: 'Data Visualization', lessons: ['Matplotlib', 'Seaborn'] },
+                    { section: 'Machine Learning Concepts', lessons: ['Regression', 'Classification'] },
+                ]
+            },
+            {
+                id: 'c3',
+                title: 'Complete SQL Bootcamp 2025: Go from Zero to Hero',
+                instructor: 'Jose Portilla',
+                rating: 4.5,
+                reviews: 7800,
+                price: 12.99,
+                originalPrice: 69.99,
+                imageUrl: 'https://placehold.co/300x180/ADD8E6/000000?text=SQL',
+                description: 'Become an SQL expert! Learn to read and write complex queries to a database using PostgreSQL.',
+                learnings: [
+                    'Understand the SQL language',
+                    'Create and manipulate databases',
+                    'Perform advanced SQL queries',
+                    'Join multiple tables with ease'
+                ],
+                curriculum: [
+                    { section: 'SQL Basics', lessons: ['SELECT Statement', 'Filtering Data'] },
+                    { section: 'Database Design', lessons: ['Tables', 'Relationships'] },
+                    { section: 'Advanced Queries', lessons: ['JOINs', 'Subqueries'] },
+                    { section: 'Database Management', lessons: ['Indexes', 'Views'] },
+                ]
+            },
+            {
+                id: 'c4',
+                title: 'The Ultimate React Native Course: Build Real-World Apps',
+                instructor: 'Stephen Grider',
+                rating: 4.8,
+                reviews: 11000,
+                price: 24.99,
+                originalPrice: 119.99,
+                imageUrl: 'https://placehold.co/300x180/ADD8E6/000000?text=React+Native',
+                description: 'Build native iOS and Android apps with React Native. Master components, state management, navigation, and more!',
+                learnings: [
+                    'Build cross-platform mobile apps',
+                    'Understand React Native fundamentals',
+                    'Work with React Navigation',
+                    'Integrate with Firebase'
+                ],
+                curriculum: [
+                    { section: 'Getting Started', lessons: ['Setup', 'Basic Components'] },
+                    { section: 'Navigation', lessons: ['Stack Navigator', 'Tab Navigator'] },
+                    { section: 'State Management', lessons: ['Context API', 'Redux'] },
+                    { section: 'API Integration', lessons: ['Fetching Data', 'Error Handling'] },
+                ]
+            },
+        ];
+
+        let currentFilteredCourses = [...DUMMY_COURSES];
+
+        // --- Utility Functions for Icons ---
+        function getStarIcon(fillColor = 'text-yellow-500') {
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${fillColor}">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>`;
+        }
+
+        function getSearchIcon() {
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>`;
+        }
+
+        function getDollarSignIcon(size = 18, className = '') {
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}">
+                        <path d="M12 2v22"></path>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>`;
+        }
+
+        function getLaptopIcon(size = 18, className = '') {
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}">
+                        <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.31A2 2 0 0 1 20.73 22H3.27a2 2 0 0 1-1.55-3.69L4 16"></path>
+                    </svg>`;
+        }
+
+        // --- DOM Elements ---
+        const courseGrid = document.getElementById('course-grid');
+        const searchInput = document.getElementById('search-input');
+        const searchForm = document.querySelector('.search-form');
+        const courseListingSection = document.querySelector('.course-listing-section');
+        const heroSection = document.querySelector('.hero-section');
+        const courseDetailPage = document.getElementById('course-detail-page');
+        const backToCoursesBtn = document.getElementById('back-to-courses-btn');
+
+        const detailCourseImage = document.getElementById('detail-course-image');
+        const detailCourseTitle = document.getElementById('detail-course-title');
+        const detailCourseDescription = document.getElementById('detail-course-description');
+        const detailCourseInstructor = document.getElementById('detail-course-instructor');
+        const detailCourseRating = document.getElementById('detail-course-rating');
+        const detailCourseReviews = document.getElementById('detail-course-reviews');
+        const detailCourseLearnings = document.getElementById('detail-course-learnings');
+        const detailCourseCurriculum = document.getElementById('detail-course-curriculum');
+        const detailCoursePrice = document.getElementById('detail-course-price');
+        const detailCourseOriginalPrice = document.getElementById('detail-course-original-price');
+        const detailCourseOriginalPriceContainer = document.getElementById('detail-course-original-price-container');
+
+
+        // --- Render Functions ---
+
+        // Renders a single course card
+        function renderCourseCard(course) {
+            const card = document.createElement('div');
+            card.className = 'course-card';
+            card.dataset.courseId = course.id; // Store course ID for click handling
+
+            const starsHtml = Array(5).fill().map((_, i) => {
+                return getStarIcon(i < Math.floor(course.rating) ? 'text-yellow-500' : 'gray-star');
+            }).join('');
+
+            card.innerHTML = `
+                <img src="${course.imageUrl}" alt="${course.title}" onerror="this.onerror=null;this.src='https://placehold.co/300x180/ADD8E6/000000?text=Course+Image';">
+                <div class="course-card-content">
+                    <h3 class="course-card-title">${course.title}</h3>
+                    <p class="course-card-instructor">${course.instructor}</p>
+                    <div class="course-card-rating">
+                        <span>${course.rating}</span>
+                        <div class="stars">${starsHtml}</div>
+                        <span class="reviews">(${course.reviews})</span>
+                    </div>
+                    <div class="course-card-price-info">
+                        <span class="course-card-price">
+                            ${getDollarSignIcon(18, 'text-gray-700')}
+                            ${course.price.toFixed(2)}
+                        </span>
+                        ${course.originalPrice ? `
+                        <span class="course-card-original-price">
+                            ${getDollarSignIcon(14, 'text-gray-400')}
+                            ${course.originalPrice.toFixed(2)}
+                        </span>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            // Add click event listener to each card
+            card.addEventListener('click', () => showCourseDetail(course.id));
+            return card;
+        }
+
+        // Renders all courses in the grid
+        function renderCourseListing(coursesToRender) {
+            courseGrid.innerHTML = ''; // Clear previous courses
+            if (coursesToRender.length === 0) {
+                courseGrid.innerHTML = '<p class="text-center text-gray-600 col-span-full">No courses found.</p>';
+                return;
+            }
+            coursesToRender.forEach(course => {
+                courseGrid.appendChild(renderCourseCard(course));
+            });
+        }
+
+        // Shows the detail page for a specific course
+        function showCourseDetail(courseId) {
+            const course = DUMMY_COURSES.find(c => c.id === courseId);
+            if (!course) {
+                console.error('Course not found:', courseId);
+                return;
+            }
+
+            // Populate detail page elements
+            detailCourseImage.src = course.imageUrl;
+            detailCourseImage.alt = course.title;
+            detailCourseImage.onerror = function() { this.onerror=null; this.src='https://placehold.co/700x400/ADD8E6/000000?text=Course+Image'; };
+
+            detailCourseTitle.textContent = course.title;
+            detailCourseDescription.textContent = course.description;
+            detailCourseInstructor.textContent = course.instructor;
+            detailCourseRating.textContent = course.rating;
+            detailCourseReviews.textContent = `(${course.reviews} ratings)`;
+            detailCoursePrice.textContent = course.price.toFixed(2);
+
+            if (course.originalPrice) {
+                detailCourseOriginalPrice.textContent = course.originalPrice.toFixed(2);
+                detailCourseOriginalPriceContainer.style.display = 'flex'; // Show if original price exists
+            } else {
+                detailCourseOriginalPriceContainer.style.display = 'none'; // Hide if no original price
+            }
+
+            // Populate "What you'll learn"
+            detailCourseLearnings.innerHTML = '';
+            course.learnings.forEach(learning => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    ${learning}
+                `;
+                detailCourseLearnings.appendChild(li);
+            });
+
+            // Populate "Course Content"
+            detailCourseCurriculum.innerHTML = '';
+            course.curriculum.forEach(section => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'curriculum-section';
+                let lessonsHtml = section.lessons.map(lesson => `
+                    <li>
+                        ${getLaptopIcon(18, 'text-gray-500')}
+                        ${lesson}
+                    </li>
+                `).join('');
+                sectionDiv.innerHTML = `
+                    <h3>${section.section}</h3>
+                    <ul>${lessonsHtml}</ul>
+                `;
+                detailCourseCurriculum.appendChild(sectionDiv);
+            });
+
+            // Toggle visibility
+            heroSection.style.display = 'none';
+            courseListingSection.style.display = 'none';
+            courseDetailPage.style.display = 'block';
+        }
+
+        // --- Event Handlers ---
+
+        // Handles search form submission
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm === '') {
+                currentFilteredCourses = [...DUMMY_COURSES];
+            } else {
+                currentFilteredCourses = DUMMY_COURSES.filter(course =>
+                    course.title.toLowerCase().includes(searchTerm) ||
+                    course.instructor.toLowerCase().includes(searchTerm) ||
+                    course.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            renderCourseListing(currentFilteredCourses);
+            // Ensure we are back on the main listing page after search
+            heroSection.style.display = 'block';
+            courseListingSection.style.display = 'block';
+            courseDetailPage.style.display = 'none';
+        });
+
+        // Handles "Back to Courses" button click
+        backToCoursesBtn.addEventListener('click', () => {
+            courseDetailPage.style.display = 'none';
+            heroSection.style.display = 'block';
+            courseListingSection.style.display = 'block';
+            renderCourseListing(currentFilteredCourses); // Re-render with current filter
+        });
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCourseListing(currentFilteredCourses);
+        });
+
+    </script>
+</body>
+</html>
